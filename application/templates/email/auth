@@ -1,0 +1,11 @@
+Dear {{ user.username }},
+
+Thanks for registering with The LockerRoom please click on the following link to confirm your email:
+
+{{ url_for('confirm_email', token=token, _external=True) }}
+
+We look forward to working out with you
+
+Sincerely,
+
+The LockerRoom Team

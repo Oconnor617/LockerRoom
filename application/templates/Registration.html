@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome</title>
+
+    <style>
+        input{
+            border:1px solid #a9a9a9;
+            height:34px;
+            line-height:34px;
+            width:550px;
+            margin-bottom:20px;
+            padding-left:5px;
+        }
+        form{
+          text-align: center;
+        }
+        #btn{
+            background:green;
+            color:#fff;
+            font-size:14px;
+            width:120px;
+            line-height:34px;
+            border:none 0;
+            cursor:pointer;
+            margin:20px 20px 0 0;
+        }
+        .myButton{
+            background:red;
+            color:#fff;
+            font-size:14px;
+            width:120px;
+            line-height:34px;
+            border:none 0;
+            cursor:pointer;
+            margin:20px 20px 0 0;
+        }
+        #ajax_btn{/* ID Slector */
+            background:blue;
+            color:#fff;
+            font-size:14px;
+            width:120px;
+            line-height:34px;
+            border:none 0;
+            cursor:pointer;
+            margin:20px 20px 0 0;
+        }
+        span{
+          color: red;
+          text-align: center;
+        }
+    </style>
+  </head>
+  {% extends "base.html" %}
+
+  {% block content %}
+  <body>
+    <h1 style="text-align: center;">A Registration Form</h1>
+    <form id="regForm" onsubmit="return validate()" method="post"> <!--If validate returns True the form is submitted if False not submitted-->
+      <div>
+                          <span id="un_error"></span>
+        <input id="username" type="text" placeholder="Username" name="regName">
+      </div>
+      <div>
+        <input id="email" type="text" placeholder="Email Address" name="regEmail">
+                          <span id="email_error"></span>
+      </div>
+      <div>
+        <input id="password" type="text" placeholder="Password" name="password">
+      </div>
+      <div>
+        <input id="retype" type="text" placeholder="Retype Password" name="retype">
+                          <br>
+                          <span id="pw_error"></span>
+      </div>
+      <div>
+        <input id="btn" type="submit" value="Register">
+      </div>
+      <div>
+        <input class="myButton" id="reset_btn" type="reset" value="Reset" onclick="clearEntry()">
+      </div>
+            <div>
+        <input class="myButton" id="ajax_btn" type="reset" value="Reset" onclick="clearEntry()">
+      </div>
+    </form>
+
+    <script>
+      function validate(){
+        let ok = true;
+        let un = document.getElementById("username").value;
+        console.log(typeof(un));
+        let email = document.getElementById("email").value;
+        let pw = document.getElementById("password").value;
+        let pwR = document.getElementById("retype").value;
+
+        if(un == ""){
+          document.getElementById('un_error').innerHTML = "Username is a required field";
+          ok = false;
+        }
+        if(email == "" || !/^\w+@[a-z0-9]+(\.[a-z]+){1,3}$/.test(email)){
+          document.getElementById('email_error').innerHTML = "Please enter a valid email address";
+          ok = false;
+        }
+        if (pw == "" || (pw != pwR)){
+          document.getElementById('pw_error').innerHTML = "Those Passwords don't match. PLease try again";
+          ok = false;
+        }
+        if (ok) {
+              return true
+        }
+        else{
+          window.alert("This is Client Side Validation. See Below for the reasons why this form was rejected");
+              console.log("Username: " + un);
+              console.log("email: " + email);
+              console.log("Password: " + pw);
+              console.log("Retype: " + pwR);
+          return false;
+        }
+  }
+    function clearEntry(){
+
+      document.getElementById('un_error').innerHTML = ' ';
+      document.getElementById('email_error').innerHTML = ' ';
+      document.getElementById('pw_error').innerHTML = ' ';
+   }
+  </script>
+    <p id="demo"></p>
+  </body>
+{% endblock %}
+</html>

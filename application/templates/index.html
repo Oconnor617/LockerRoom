@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Set the viewport and initial scale -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Landing Page</title>
+    <style>
+        * {
+        box-sizing: border-box; /* include padding and border in all elements width/height */
+        }
+
+        h1{
+            color: white;
+            display: block;
+            width: 50%; /*Hopefully this makes it responsive and always half the window*/
+            margin: auto;
+            text-align: center;
+        }
+        h1 + h3{/*Adjacency Selector for the header*/
+            color: purple;
+            font-style: italic;
+            border: purple dotted;
+            width: 50%;
+            text-align: center;
+            margin: auto;
+        }
+
+        h2{
+        color: white;
+        margin: auto;
+        text-align: center;
+        }
+
+        /* Column container This will hold my Flex images */
+        .row {
+           display: flex;
+        }
+
+        /* This will sit inside a Flex row for browsers and flex column when under 800px */
+        .equip{
+          flex: 20%;
+          background-color: purple;
+          padding: 5px;
+          text-align:center;
+          height: auto;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        /* Inside of one of the Flex columns */
+        img{
+        max-width: 100%;
+        height: auto;
+        object-fit: fill;
+        flex-grow: 1; /*Make the image take up the whole Flex so anything else goes in the next column*/
+        }
+
+        /* This will sit inside a Flex row for browsers and flex column when under 800px */
+        .management{
+          flex: 35%;
+          background-color: green;
+          padding: 5px;
+          text-align:center;
+          height: auto;
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap; <!-- So that the image and text will flex within this management container -->
+        }
+        .feedback{
+            flex: 30%;
+            background-color: grey;
+            padding: 5px;
+            height: auto;
+            justify-content: center;
+        }
+
+        p + p{/*adjacency selector*/
+          font-size: 0.5in;
+          color: purple;
+          font-style: italic;
+        }
+        span + span{/*adjacency selector*/
+          font-size: 0.5in;
+          color: green;
+          font-style: italic;
+        }
+
+        h2 + span{/*adjacency selector*/
+          font-size: 0.5in;
+          color: grey;
+          font-style: italic;
+        }
+
+        /* Select all the p elements in my Equipment Divs */
+        .equip > span{
+            color: white;
+            background: green;
+        }
+
+        /* Select all the p elements in my Equipment Divs */
+        div.equip > * {
+            color: white;
+            background: green;
+        }
+
+
+        #myP{
+            color:white;
+            font-style: italic;
+            background: yellow;
+        }
+
+        /* Inside of one of the Flex columns */
+        .manimg{
+          background-color: #aaa;
+          width: 100%;
+          padding: 20px;
+          height: auto;
+        }
+
+        /* Header */
+       .header {
+        padding: 60px;
+        text-align: center;
+        background: yellow;
+        color: white;
+        }
+
+        /* Responsive layout - when the screen is less than 800px wide,
+        make the images stack on top of each other instead of next to each other */
+        @media screen and (max-width: 800px) {
+        .row {
+            flex-direction: column;
+         }
+         h1{
+         font-size: 12px;
+         }
+         p{
+         font-size: 10px;
+         }
+        }
+    </style>
+    <script>
+        async function fetchWeather(lat, lon){
+            const mykey = 'c08a737c94c25541b19d6c99699a31f7';
+            let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=' + mykey;
+            let response = await fetch(url, {mode: "cors"});// wait until the Promise is resolved until JS continues
+            let data = await response.json(); // make the response into a useful Data object
+            console.log(data.weather);
+            $('#Lat').html('Lattitude: ' + data.coord.lat);
+            $('#Weather').html('Current Weather: ' + data.weather[0].main);
+            console.log(data);
+            console.log(data.base);
+        }
+    </script>
+    <script>
+        async function testRun(){
+          let mylat = 42.2495;
+          let mylon = -71.0662;
+          console.log("Lat: " + mylat + "Lon: " + mylon);
+          await fetchWeather(mylat, mylon); // hopefully this is still Async
+        }
+    </script>
+</head>
+
+    <div class="header">
+        <h1>Welcome to the LockerRoom</h1>
+        <h3>Hosted at Grants Gym</h3>
+        <p> This is the <b>BEST</b> home gym around</p>
+        <h2 id="test1" onclick="testRun()">Click on me to show the Weather for Milton, MA</h2>
+        <!--<p id="Lat">Lat</p> <p id="Lon">Lon</p>-->
+        <span id="Lat">Lat</span> <span id="Lon">Lon</span>
+        <p id="Weather">Weather</p> <p id="description">Dis</p>
+    </div>
+
+    <!-- The flexible grid (content) for the pictures of the gym equipment -->
+    <h2>Check out some of our equipment</h2>
+    <div class="row">
+        <div class="equip">
+            <img src="{{ url_for('static', filename='img/Bench.jpg') }}" alt="File Not Found">
+            <p>Bench</p>
+        </div>
+
+        <div class="equip">
+            <img src="{{ url_for('static', filename='img/Squat.jpg') }}" alt="File Not Found">
+            <p class ="myP" style="align-self: flex-end;">Squat</p>
+        </div>
+
+        <div class="equip">
+            <img src="{{ url_for('static', filename='img/LegPress.jpg') }}" alt="File Not Found">
+            <p id="myP">Leg Press</p>
+        </div>
+
+        <div class="equip">
+            <img src="{{ url_for('static', filename='img/Dumbell.jpg') }}" alt="File Not Found">
+            <span style="align-self: flex-end;">Dumbbells</span>
+            <!-- <p>Dumbbells</p> -->
+        </div>
+
+        <div class="equip">
+            <img src="{{ url_for('static', filename='img/Incline.jpg') }}" alt="File Not Found">
+            <!-- <p>Incline Bench</p> -->
+            <span>Incline Bench</span>
+        </div>
+    </div>
+
+    <div class="row"> <!-- Another row div that will be used to hold my flex items for managment and form -->
+        <div class="management">
+            <img src="{{ url_for('static', filename='img/Tom.jpg') }}" alt="File Not Found">
+            <h3>Ulysses S. Grant</h3>
+            <p>Owner</p>
+        </div>
+
+        <div class="management">
+            <img class="manimg" src="{{ url_for('static', filename='img/Tom.jpg') }}" alt="File Not Found">
+            <h3>Thomas O'Connor</h3>
+            <p>Gym Manager</p>
+        </div>
+
+        <div class="feedback">
+            <h1 style="text-align: center;">Let us know if you have a question</h1>
+        <form id="feedbackForm" method="post" onsubmit="return validateEmail()">
+            <!--If validate returns True the form is submitted if False not submitted-->
+            <input type="text" name="email" id="questionEmail" placeholder="Enter your Email Address">
+            <span id="email_error" style="color:red;"></span>
+            <input type="text" id="questionField" name="message" placeholder="Type your question here">
+            <input id="btn" type="submit" value="Submit">
+        </form>
+        </div>
+    </div>
+    <script>
+        function validateEmail(){
+            let allow = true;
+            let email = document.getElementById("questionEmail").value;
+
+            if(email == "" || !/^\w+@[a-z0-9]+(\.[a-z]+){1,3}$/.test(email)){
+               document.getElementById('email_error').innerHTML = "Please enter a valid email address";
+               ok = false;
+            }
+            if (ok){ // allow the form to be submitted;
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    </script>
+{% endblock %}
+</html>

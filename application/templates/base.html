@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        /* If I am correct the body style should carry over to all pages */
+        body {
+          font-family: Arial;
+          margin: 0;
+          background-color:blue;
+        }
+        .topnav{
+          background-color: #333;
+          height: 50px;
+        }
+        .topnav a {
+          float: left;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          background-color: green;
+          font-size: 17px;
+        }
+        .topnav .logo{ /* Selector for the logo in my NavBar */
+            float: left;
+            text-align: center;
+            padding: 14px 14px;
+            border: purple dotted 2px;
+            /* height: 100%;*/
+            width: auto;
+            max-width: 100px;
+            height: auto;
+            max-height: 50px;
+            /* height: 50px;
+            Width: 100px; */
+
+        }
+        .server_msg{
+            text-align: center;
+            background-color: green;
+        }
+        div.server_msg ul{
+            color: white;
+            text-size: 15px;
+        }
+
+        /* Footer */
+        .footer {
+         padding: 20px;
+         text-align: center;
+         background: white;
+         bottom: 10px;
+         border: 3px solid #8AC007;
+         overflow: hidden;
+         display: flex;
+         justify-content: space-between;
+        }
+        #left-foot{
+            float:left;
+            flex:25%
+            background:green;
+        }
+        #right-foot{
+            float:right;
+            flex:25%
+            background:red;
+        }
+
+    </style>
+    <title>Base Template</title>
+    <script>
+            $(document).ready(function(){
+            //Select the a element on hover and do CSS to it
+                $("a").hover(function(){//get all a's
+                    $(this).css("background-color", "blue");//When you first start to hover change to yellow
+                    }, function(){
+                    $(this).css("background-color", "green"); //change it back once you leave
+                });
+            });// end JQuery function
+    </script>
+</head>
+<body>
+    <div class="topnav">
+        <img class="logo" src="{{ url_for('static', filename='img/Missing.jpg') }}" alt=" Logo File Not Found">
+        <!-- <img class="logo" src="{{ url_for('static', filename='img/Logo.jpg') }}" alt=" Logo File Not Found">-->
+        <a href="/index">Homepage</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        {% else %} <!-- This means somebody is logged in -->
+        <a href="{{ url_for('user', username=current_user.username) }}">Profile Page</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+    <div>
+        <!-- This div should span the top of each page -->
+        <hr> <!-- A thin line should span the page below the navigation bar -->
+        <div class="server_msg">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}{% endblock %} <!--This is where the other HTML pages will insert themselves-->
+    </div>
+    <div class="footer">
+        <!-- <h3>Footer - More Stuff will go here soon</h3> -->
+        <div id="left-foot">
+            <p>Paragraph on the Left</p>
+            <p>Do I get multiple lines or extend?</p>
+            <p>Wonder if my styles will happen her</p>
+        </div>
+
+        <div id="right-foot">
+            <p>Paragraph on the Right</p>
+        </div>
+
+    </div>
+</body>
+</html>

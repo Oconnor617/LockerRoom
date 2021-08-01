@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+{% extends "base.html" %}
+
+{% block content %}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login to the Locker Room</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="jquery-3.5.1.min.js"></script> -->
+    <script>
+        $(document).ready(function(){
+        //Select the P element on hover and do CSS to it
+            $("#myP").hover(function(){//get myP
+                $(this).css("background-color", "yellow");//When you first start to hover change to yellow
+                }, function(){
+                $(this).css("background-color", "purple"); //change it back once you leave
+            });
+        });// end JQuery function
+    </script>
+    <script>
+      $( "span" ).click(function() {
+        $( "li" ).each(function() {
+          $( this ).toggleClass( "example" );
+        });
+      });
+    </script>
+
+    <style>
+    /* Column container */
+    .row {
+     display: flex;
+    /*flex-wrap: wrap;*/
+    }
+
+    /* Create two unequal columns that sits next to each other */
+    /* Sidebar/left column */
+    .info {
+      flex: 30%;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+
+    /* Main column which will hold a chart of user weight and form for updating*/
+    .weight {
+      flex: 70%;
+      background-color: darkorange;
+      padding: 20px;
+    }
+
+    .chart{
+      padding: 20px;
+      background-color: #aaa;
+    }
+
+    input{
+        border:1px solid #a9a9a9;
+        height:34px;
+        line-height:34px;
+        width:100px;
+        margin-bottom:20px;
+        padding-left:5px;
+    }
+    form{
+      text-align: center;
+    }
+    #btn{
+        background:green;
+        color:#fff;
+        font-size:14px;
+        width:90px;
+        line-height:34px;
+        border:none 0;
+        cursor:pointer;
+        margin:20px 20px 0 0;
+    }
+
+        /* Profile pic. I will onclick() swap this to border-radius */
+    .profile-pic {
+      background-color: #aaa;
+      /*width: 100%;*/
+      padding: 20px;
+    }
+
+
+    /* Header/logo Title */
+    .header {
+      padding: 60px;
+      text-align: center;
+      background: #1abc9c;
+      color: white;
+    }
+    p + h1{
+      color: green;
+      font-size: 0.5in;
+    }
+
+    p b{
+      color: purple;
+      font-size: 0.5in;
+      font-style: italic;
+      border: purple dotted;
+    }
+
+    #goals{ /*I am going to style my bottom div via ID Selector rather than class */
+      background-color: green;
+      height: auto;
+      width: 100%;
+      display: flex;
+      justify-content:space-between; /*Make the divs sapced around*/
+    }
+
+    .left{
+      flex:25%;
+      float: left;
+      background-color:gray;
+    }
+
+    .center{
+      flex:25%;
+      background-color:white;
+    }
+
+    .center li{ /*Style the li in my center div*/
+      background: lightblue;
+    }
+
+    .right{
+      flex:25%;
+      float:right;
+      background-color: hotpink;
+    }
+
+    /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 800px) {
+      .row{
+        flex-direction: column;
+      }
+    }
+
+  </style>
+
+  </head>
+
+    <div class="header">
+      <h1>UserPage for {{ user.username }}</h1>
+      <p>Memeber since: <b>Insert Date Here</b></p>
+      <p>Member since: {{ user.registered_on }}</p>
+      {% if current_user.confirmed %}
+      <p id="confirmed">Email confirmed on: {{ user.confirmed_on }}</p>
+      {% else %}
+      <p id="Not_confirm">Email has not been confirmed!</p>
+      {% endif %}
+    </div>
+
+    <p id="feedback" style= "color: red; text-align: center;"></p>
+
+    <p id="myP">Hover over this to change it with JQuery</p>
+        <h1 style="text-align: center;">User Page</h1>
+
+    <!-- The flexible grid (content) -->
+    <div class="row"> <!-- This row class will hold my Flex items-->
+      <div class="info">
+        <h2>About Me and my Current lifts</h2>
+        <h5>Photo of me:</h5>
+        <div class="profile-pic" style="height:200px;" id="pro_pic">Image</div>
+        <p>And Below are some of my current lifts.</p>
+        <h3>Current 1 rep maxes</h3>
+        <p>Squat: 265</p>
+        <p>Bench: 215</p>
+        <p>Deadlift: {{user.dl1rm }}</p>
+        <p>OHP: 135</p>
+      </div>
+
+      <div class="weight">
+        <h2>Weight for User: {{ current_user.username }}</h2>
+        <h5>Enter your weight for today: </h5>
+        <form id="weightEntry" method="post" onsubmit="return validate()">
+          <!--If validate returns True the form is submitted if False not submitted-->
+          <input type="text" name="weight" id="weight" placeholder="EnterWeight">
+          <input id="btn" type="submit" value="Submit">
+        </form>
+
+        <div class="chart" style="height:200px;">My Chart.js for weight history will go here</div>
+        <p>My goal is 215 lbs.</p>
+        <p>We shall see if I even get there</p>
+        <br>
+      </div>
+    </div><!--End Flex Row -->
+
+    <div id="goals">
+
+      <div class="left">
+        <p>Some text will go here</p>
+      </div>
+
+      <div class="center">
+        <ul>
+          <li>Deadlift Goal: 405</li>
+        </ul>
+      </div>
+
+      <div class="right">
+        <h1 style="text-align: center;">More Here</h1>
+      </div>
+
+    </div><!-- end goals -->
+
+{% endblock %}
+</html>

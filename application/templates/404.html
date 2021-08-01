@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 Page not found</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function sleep(ms){ // lets use a promise to make sure we actually wait before more JS executes
+            return new Promise(
+                resolve => setTimeout(resolve,ms)
+            );
+        }
+        async function sleepTest(){
+            console.log("start");
+            await sleep(5000); // hopefully this casues the page to sleep for 5 secs
+            console.log("End");
+            alert("Hopefully this message pops up after 5 seconds");
+            document.getElementById('link').setAttribute("class", "link_show");
+            /*$("#link")(function(){
+                console.log("Am I getting here")
+                $(this).css("display", "block")// change the display of the p
+            });*/
+        }
+
+    </script>
+    <script>
+        document.onload = sleepTest(); /* a Javascript event. Onload() */
+    </script>
+
+    <style>
+        .link{
+            text-align: center;
+            font-size: 1in;
+            color: green;
+            display: none;
+            border: 2px dotted purple;
+        }
+        .link_show{
+            text-align: center;
+            font-size: 1in;
+            color: green;
+            display: block;
+            border: 2px dotted purple;
+        }
+        h1 + p{
+          color: green;
+          text-align: center;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>404 Page Not Found!</h1>
+    <p>Boo! Stop trying to brake my webpage with URL's that don't exist. As punishment you must sit here for
+      5 seconds before I allow you to return to safety. </p>
+
+    <p id="link" class="link">Now click <b><a href="{{ url_for('index') }}">Here</a></b>and get out of here</p>
+
+    <h1 onclick="sleepTest()">Click on me and see if I wait for 5 seconds</h1>
+
+  </body>
+</html>
