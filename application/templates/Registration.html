@@ -60,28 +60,30 @@
     <h1 style="text-align: center;">A Registration Form</h1>
     <form id="regForm" onsubmit="return validate()" method="post"> <!--If validate returns True the form is submitted if False not submitted-->
       <div>
+        <input id="username" type="text" placeholder="Username" name="regName"><br>
                           <span id="un_error"></span>
-        <input id="username" type="text" placeholder="Username" name="regName">
       </div>
       <div>
-        <input id="email" type="text" placeholder="Email Address" name="regEmail">
+        <input id="email" type="text" placeholder="Email Address" name="regEmail"><br>
                           <span id="email_error"></span>
       </div>
       <div>
         <input id="password" type="text" placeholder="Password" name="password">
       </div>
       <div>
-        <input id="retype" type="text" placeholder="Retype Password" name="retype">
-                          <br>
+        <input id="retype" type="text" placeholder="Retype Password" name="retype"><br>
                           <span id="pw_error"></span>
       </div>
+
       <div>
         <input id="btn" type="submit" value="Register">
       </div>
+
       <div>
         <input class="myButton" id="reset_btn" type="reset" value="Reset" onclick="clearEntry()">
       </div>
-            <div>
+
+      <div>
         <input class="myButton" id="ajax_btn" type="reset" value="Reset" onclick="clearEntry()">
       </div>
     </form>
