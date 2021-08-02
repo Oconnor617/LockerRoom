@@ -88,6 +88,7 @@ def register():
             user = User(username=regName, email=user_email)  # create a new user in the db
             user.set_password(pass1)  # Javascript on front-end should have already confirmed pass1 == retype
             # use the set_pw method because it will store a hashed password and we never see the plain-text password
+            user.set_reg_time()
             db.session.add(user)
             db.session.commit()  # user added!
             flash('From the Sever: Thanks for registering please use your new credentials to login')
