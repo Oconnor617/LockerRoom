@@ -38,18 +38,25 @@
         /* Column container This will hold my Flex images */
         .row {
            display: flex;
+           background: #1abc9c;
         }
 
         /* This will sit inside a Flex row for browsers and flex column when under 800px */
         .equip{
-          flex: 20%;
-          background-color: purple;
-          padding: 5px;
+          flex: 20%;/*Try to fit 5 items in a row */
           text-align:center;
           height: auto;
           display: flex;
           justify-content: center;
           flex-direction: column;
+        }
+
+        /* Select all the p elements in my Equipment Divs */
+        div.equip > * {
+            color: black;
+            font-style: italic;
+            font-style: bold;
+            font-size: 15px;
         }
 
         /* Inside of one of the Flex columns */
@@ -80,55 +87,50 @@
         }
 
         p + p{/*adjacency selector*/
-          font-size: 0.5in;
+          font-size: 0.25in;
           color: purple;
           font-style: italic;
-        }
-        span + span{/*adjacency selector*/
-          font-size: 0.5in;
-          color: green;
-          font-style: italic;
+          text-align:center;
         }
 
-        h2 + span{/*adjacency selector*/
-          font-size: 0.5in;
-          color: grey;
-          font-style: italic;
-        }
-
-        /* Select all the p elements in my Equipment Divs */
-        .equip > span{
-            color: white;
-            background: green;
-        }
-
-        /* Select all the p elements in my Equipment Divs */
-        div.equip > * {
-            color: white;
-            background: green;
-        }
-
-
-        #myP{
-            color:white;
+        #equip-header{
+            color: black;
             font-style: italic;
-            background: yellow;
+            font-bold: bold;
+            width:auto%;
+            text-align:center;
         }
 
         /* Inside of one of the Flex columns */
         .manimg{
           background-color: #aaa;
-          width: 100%;
-          padding: 20px;
+          max-width: 100%;
           height: auto;
+          object-fit: fill;
+        }
+        br + span{
+            color:white;
+            font-style: italic;
         }
 
         /* Header */
        .header {
         padding: 60px;
         text-align: center;
-        background: yellow;
+        background: #1abc9c;
         color: white;
+        }
+
+        .header span{/*select all the spans in my header*/
+          font-size: 0.15in;
+          color: green;
+          font-style: italic;
+        }
+
+        #stars{ /*ID Selector for the review */
+            color: gold;
+            font-size: 1in;
+            text-align:center;
         }
 
         /* Responsive layout - when the screen is less than 800px wide,
@@ -140,8 +142,8 @@
          h1{
          font-size: 12px;
          }
-         p{
-         font-size: 10px;
+         div.equip > * {
+            font-size: 25px;
          }
         }
     </style>
@@ -152,8 +154,14 @@
             let response = await fetch(url, {mode: "cors"});// wait until the Promise is resolved until JS continues
             let data = await response.json(); // make the response into a useful Data object
             console.log(data.weather);
-            $('#Lat').html('Lattitude: ' + data.coord.lat);
-            $('#Weather').html('Current Weather: ' + data.weather[0].main);
+            $('#Lat').html('<u>Latitude:</u> ' + data.coord.lat);
+            $('#Lon').html('   <u>Longitude:</u> ' + data.coord.lon);
+            $('#Weather').html('<u>Current Weather:</u> ' + data.weather[0].main);
+            $('#description').html('   <u>Description:</u> ' + data.weather[0].description);
+            let kelvin = data.main.temp;
+            let far = (kelvin-273.15)*(9/5)+32;
+            let f = far.toFixed(2);
+            $('#Temp').html('<u>Temperature:</u> ' + f + ' F');
             console.log(data);
             console.log(data.base);
         }
@@ -172,14 +180,20 @@
         <h1>Welcome to the LockerRoom</h1>
         <h3>Hosted at Grants Gym</h3>
         <p> This is the <b>BEST</b> home gym around</p>
+        <p id="quote">"I am considering moving to Milton, MA just to work out there"<br>
+            <span id="stars">*****</span><br>
+        -Arnold Schwarzenegger</p>
         <h2 id="test1" onclick="testRun()">Click on me to show the Weather for Milton, MA</h2>
-        <!--<p id="Lat">Lat</p> <p id="Lon">Lon</p>-->
-        <span id="Lat">Lat</span> <span id="Lon">Lon</span>
-        <p id="Weather">Weather</p> <p id="description">Dis</p>
+
+        <span id="Lat"></span> <span id="Lon"></span><br>
+        <span id="Weather"></span><br>
+        <span id="description"></span><br>
+        <span id="Temp"></span><br>
+        <!-- <h2 id="equip-header">Check out some of our equipment</h2> -->
+        <span id="equip-header">Check out some of our equipment</span>
     </div>
 
     <!-- The flexible grid (content) for the pictures of the gym equipment -->
-    <h2>Check out some of our equipment</h2>
     <div class="row">
         <div class="equip">
             <img src="{{ url_for('static', filename='img/Bench.jpg') }}" alt="File Not Found">
@@ -188,38 +202,36 @@
 
         <div class="equip">
             <img src="{{ url_for('static', filename='img/Squat.jpg') }}" alt="File Not Found">
-            <p class ="myP" style="align-self: flex-end;">Squat</p>
+            <p>Squat</p>
         </div>
 
         <div class="equip">
             <img src="{{ url_for('static', filename='img/LegPress.jpg') }}" alt="File Not Found">
-            <p id="myP">Leg Press</p>
+            <p>Leg Press</p>
         </div>
 
         <div class="equip">
             <img src="{{ url_for('static', filename='img/Dumbell.jpg') }}" alt="File Not Found">
-            <span style="align-self: flex-end;">Dumbbells</span>
-            <!-- <p>Dumbbells</p> -->
+            <p>Dumbbells</p>
         </div>
 
         <div class="equip">
             <img src="{{ url_for('static', filename='img/Incline.jpg') }}" alt="File Not Found">
-            <!-- <p>Incline Bench</p> -->
-            <span>Incline Bench</span>
+            <p>Incline Bench</p>
         </div>
     </div>
 
     <div class="row"> <!-- Another row div that will be used to hold my flex items for managment and form -->
         <div class="management">
-            <img src="{{ url_for('static', filename='img/Tom.jpg') }}" alt="File Not Found">
-            <h3>Ulysses S. Grant</h3>
-            <p>Owner</p>
+            <img class="manimg" src="{{ url_for('static', filename='img/Tom.jpg') }}" alt="File Not Found">
+            <p>Ulysses S. Grant</p>
+            <span>Owner</span>
         </div>
 
         <div class="management">
             <img class="manimg" src="{{ url_for('static', filename='img/Tom.jpg') }}" alt="File Not Found">
-            <h3>Thomas O'Connor</h3>
-            <p>Gym Manager</p>
+            <p>Thomas O'Connor</p><br>
+            <span>Gym Manager</span>
         </div>
 
         <div class="feedback">
