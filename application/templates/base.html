@@ -9,7 +9,8 @@
         body {
           font-family: Arial;
           margin: 0;
-          background-color:blue;
+          background-color: #f1f1f1;
+          height: 100%;
         }
         .topnav{
           background-color: #333;
@@ -26,16 +27,11 @@
         }
         .topnav .logo{ /* Selector for the logo in my NavBar */
             float: left;
-            text-align: center;
-            padding: 14px 14px;
-            border: purple dotted 2px;
-            /* height: 100%;*/
             width: auto;
             max-width: 100px;
-            height: auto;
+            height: 50px;
             max-height: 50px;
-            /* height: 50px;
-            Width: 100px; */
+            object-fit: fill;
 
         }
         .server_msg{
@@ -51,12 +47,13 @@
         .footer {
          padding: 20px;
          text-align: center;
-         background: white;
+         background: darkgrey;
          bottom: 10px;
          border: 3px solid #8AC007;
          overflow: hidden;
          display: flex;
          justify-content: space-between;
+         max-height: 150px;
         }
         #left-foot{
             float:left;
@@ -68,6 +65,15 @@
             flex:25%
             background:red;
         }
+        .foot-content p{ /* Selector for any p in a foot-content class */
+            font-style: italic;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+        }
+
 
     </style>
     <title>Base Template</title>
@@ -84,8 +90,8 @@
 </head>
 <body>
     <div class="topnav">
-        <img class="logo" src="{{ url_for('static', filename='img/Missing.jpg') }}" alt=" Logo File Not Found">
-        <!-- <img class="logo" src="{{ url_for('static', filename='img/Logo.jpg') }}" alt=" Logo File Not Found">-->
+        <!-- <img class="logo" src="{{ url_for('static', filename='img/Missing.jpg') }}" alt=" Logo File Not Found"> -->
+        <img class="logo" src="{{ url_for('static', filename='img/Logo.jpg') }}" alt=" Logo File Not Found">
         <a href="/index">Homepage</a>
         {% if current_user.is_anonymous %}
         <a href="{{ url_for('login') }}">Login</a>
@@ -113,14 +119,18 @@
     </div>
     <div class="footer">
         <!-- <h3>Footer - More Stuff will go here soon</h3> -->
-        <div id="left-foot">
-            <p>Paragraph on the Left</p>
-            <p>Do I get multiple lines or extend?</p>
-            <p>Wonder if my styles will happen her</p>
+        <div id="left-foot" class="foot-content">
+            <p>The Locker Room @ Grant's gym <br>
+            </p>
+            <p>All rights reserved</p>
+            <br>
         </div>
 
-        <div id="right-foot">
-            <p>Paragraph on the Right</p>
+        <div id="right-foot" class="foot-content">
+            <p>Contact: lockerroom@email.com <br>
+            </p>
+            <p>Phone:617-555-5555</p>
+            <br>
         </div>
 
     </div>
