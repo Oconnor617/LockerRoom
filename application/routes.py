@@ -3,11 +3,13 @@ Created June 16, 2021
 @author: oconn
 """
 from flask import render_template, request, flash, redirect, url_for
-from application import app, db
+from application import app, db, mail
 from application.models import User
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from application.email import send_password_reset_email
+from application.email import send_password_reset_email, send_auth_email
+from flask_mail import Message
+import datetime
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -80,7 +82,7 @@ def register():
             flash("This is Server-side Validation: That username is taken. Please choose another one")
             return redirect(url_for('register'))
         if taken_email is not None:
-            flash("This is Server-side Validation: That eamil is taken. Please use another one")
+            flash("This is Server-side Validation: That email is taken. Please use another one")
             return redirect(url_for('register'))
         else:  # Everything must be okay let's register this new user
             user = User(username=regName, email=user_email)  # create a new user in the db
@@ -91,9 +93,8 @@ def register():
             flash('From the Sever: Thanks for registering please use your new credentials to login')
             return redirect(url_for('login'))
 
-        #return render_template('registration.html')
     else:
-        return render_template('registration.html') # It's a GET request. No form Submitted
+        return render_template('registration.html')  # It's a GET request. No form Submitted
 
 
 @app.route('/logout')
@@ -110,46 +111,6 @@ def logout():
 @login_required # You must be logged in as that user to access that specific user page URL
 # Flask-Login ensures that a user must be logged in to access. It will redirect to /login
 def user(username):
-    user = User.query.filter_by(username=username).first_or_404() # search the db for the UN passed in
+    user = User.query.filter_by(username=username).first_or_404()  # search the db for the UN passed in
     # The above will send a 404 back to the client browser if no user is found
     return render_template('user.html', user=user)
-
-
-@app.route("/reset_password_request", methods=['GET', 'POST'])
-def reset_password_request():
-    if current_user.is_authenticated:
-        # skip reset if they are already logged in
-        return redirect(url_for('index'))
-    if request.method == 'POST':  # Form Submitted
-        entered_email = request.form['email']
-        print(entered_email)
-        user = User.query.filter_by(email=entered_email).first()
-        if user is None:
-            flash('This is Server-side validation: That email is not in our records'
-                  'please enter the email that you registered with')
-            return redirect(url_for('reset_password_request'))
-        # This means that the email was found in the system
-        if user:
-            send_password_reset_email(user) #send the email reset to the user
-        flash("Please check your email for instructions on how to reset your password")
-        return redirect(url_for('login'))
-    else: # GET Request
-        return render_template('reset_password_request.html') # GET request so no form submitted yet
-
-
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
-# this will run when the user click on the link sent to their email'''
-def reset_password(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    user = User.verify_reset_password_token(token)
-    if not user:
-        return redirect(url_for('index'))
-    if request.method == 'POST': #Client side validation should confirm the two passwords match
-        new_pw = request.form['new_pw']
-        user.set_password(new_pw)
-        db.session.commit()
-        flash("Your password has been updated. Please login with your new credentials")
-        return redirect(url_for('login'))
-    else: # GET Request
-        return render_template('reset_password.html')
