@@ -1,4 +1,4 @@
-from application import db, app # Import the database stored iin the app directory
+from application import db, app  # Import the database stored iin the app directory
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin  # provides generic implementation so flaskLogin can work with all db
@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def set_reg_time(self):
-        datetime_obj = datetime.datetime.today()
+        datetime_obj = datetime.today()
         self.registered_on = datetime_obj
 
     def set_password(self, password):
@@ -57,8 +57,22 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
+    def get_auth_token(self, expires_in=600): #Used to Generate an auth token for email 2fa. Token uses user ID
+        return jwt.encode(
+            {'auth': self.id, 'exp': time() + expires_in},
+            app.config['SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod
+    def verify_auth_token(token): #used to verify and return the user who generated and clicked on the token
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['auth']
+        except:
+            return
+        return User.query.get(id)
+
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {} Email: {} Confirmed: {}>'.format(self.username, self.email, self.confirmed)
 
 
 class Post(db.Model):
