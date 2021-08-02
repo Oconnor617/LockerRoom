@@ -9,6 +9,8 @@
     <title>Login to the Locker Room</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- <script src="jquery-3.5.1.min.js"></script> -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
+    integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(document).ready(function(){
         //Select the P element on hover and do CSS to it
@@ -45,13 +47,14 @@
     /* Main column which will hold a chart of user weight and form for updating*/
     .weight {
       flex: 70%;
-      background-color: darkorange;
+      background-color: white;
       padding: 20px;
     }
 
     .chart{
       padding: 20px;
       background-color: #aaa;
+      max-width: 1000px;
     }
 
     input{
@@ -102,6 +105,12 @@
       font-style: italic;
       border: purple dotted;
     }
+    p a{ /* Adjacency Selector for the link to resend Auth email */
+      color: blue;
+      font-size: 0.25in;
+      font-style: italic;
+      border: blue dotted;
+    }
 
     #goals{ /*I am going to style my bottom div via ID Selector rather than class */
       background-color: green;
@@ -147,11 +156,6 @@
       <h1>UserPage for {{ user.username }}</h1>
       <p>Memeber since: <b>Insert Date Here</b></p>
       <p>Member since: {{ user.registered_on }}</p>
-      {% if current_user.confirmed %}
-      <p id="confirmed">Email confirmed on: {{ user.confirmed_on }}</p>
-      {% else %}
-      <p id="Not_confirm">Email has not been confirmed!</p>
-      {% endif %}
     </div>
 
     <p id="feedback" style= "color: red; text-align: center;"></p>
@@ -182,10 +186,13 @@
           <input id="btn" type="submit" value="Submit">
         </form>
 
-        <div class="chart" style="height:200px;">My Chart.js for weight history will go here</div>
-        <p>My goal is 215 lbs.</p>
-        <p>We shall see if I even get there</p>
+        <div class="chart">
+          <canvas id="myChart"></canvas>
+        </div>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <p style="text-align: center;">My goal is 215 lbs.</p>
         <br>
+
       </div>
     </div><!--End Flex Row -->
 
