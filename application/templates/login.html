@@ -47,8 +47,9 @@
             cursor:pointer;
             margin:20px 20px 0 0;
         }
-        span{
+        #feedback{
           color: red;
+          text-align:center;
         }
         #new_user{
         color: purple;
@@ -79,19 +80,16 @@
           <input type = "text" id = "password">
         <button onclick='login()'>Login</button>
       </div>-->
-        <h1 style="text-align: center;">A Registration Form</h1>
+        <h1 style="text-align: center;">My Login Form</h1>
         <form id="loginForm" method="post" onsubmit="return validate()">
             <!--If validate returns True the form is submitted if False not submitted-->
             <input type="text" name="username" id="username" placeholder="Username">
+            <br>
             <input type="text" name="password" id="password" placeholder="Password">
             <br>
             <input id="btn" type="submit" value="Submit">
         </form>
         <p id="new_user">New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
-        <p>
-            Forgot Your Password?
-            <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a>
-        </p>
 
         <script>
             function validate(){
