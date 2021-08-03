@@ -6,12 +6,13 @@
     <!-- <script src="jquery-3.5.1.min.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+
     $(document).ready(function(){
     //Select the P element on hover and do CSS to it
-        $("#myP").hover(function(){//get myP
-            $(this).css("background-color", "yellow");//When you first start to hover change to yellow
+        $("#new_user").hover(function(){//get the new user p and link
+            $(this).css("font-size", "25px");//When you first start to hover change to yellow
             }, function(){
-            $(this).css("background-color", "purple"); //change it back once you leave
+            $(this).css("font-size", "14px"); //change it back once you leave
         });
     });// end JQuery function
     </script>
@@ -20,7 +21,7 @@
             border:1px solid #a9a9a9;
             height:34px;
             line-height:34px;
-            width:400px;
+            width:500px;
             margin-bottom:20px;
             padding-left:5px;
         }
@@ -53,34 +54,51 @@
         }
         #new_user{
         color: purple;
+        text-align: center;
+        font-size: 14px;
+
         }
-        p a{
-        color:green;
+        p a{ /* Decendent Selector - override the color above */
+        color:blue;
         }
 
-        @media screen and (max-width: 900px) {
-           input{
-            width:250px;
-            }
-        }
+        #logo-container{ /* ID Selector */
+           align-items: center;
+          }
+        #login-logo{ /* ID Selector */
+           display: block;
+           margin-left: auto;
+           margin-right: auto;
+          }
 
+        /* Responsive layout - when the screen is less than 800px wide */
+        @media screen and (max-width: 800px) {
+        input {
+            width:200px;
+         }
+         h1, h2{
+         font-size: 14px;
+         }
+        }
     </style>
+    <script>
+        $(document).ready(function(){ // Make sure the DOM us loaded & toggle logo
+          $("#toggle").click(function(){
+            $("#logo-container").toggle(1000);
+          });
+        });
+      </script>
 </head>
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
+    <h1 style="text-align:center;">Sign into the LockerRoom</h1>
+        <div id="logo-container">
+            <img id="login-logo" src="{{ url_for('static', filename='img/Logo.jpg') }}" alt=" Logo File Not Found">
+        </div>
 
-    <p id="feedback" style= "color: red;"></p>
-
-    <p id="myP">Hover over this to change it with JQuery</p>
-      <!--<div class="form">
-        <label>Username: </label>
-          <input type = "text" id = "username">
-          <input type = "text" id = "password">
-        <button onclick='login()'>Login</button>
-      </div>-->
-        <h1 style="text-align: center;">My Login Form</h1>
+        <h2 id="toggle" style="text-align: center;">Click on me to toggle the Logo Display</h2>
+        <h1 style="text-align: center;">Enter your credentials below</h1>
         <form id="loginForm" method="post" onsubmit="return validate()">
             <!--If validate returns True the form is submitted if False not submitted-->
             <input type="text" name="username" id="username" placeholder="Username">

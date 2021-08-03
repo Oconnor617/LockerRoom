@@ -21,6 +21,18 @@
             });
         });// end JQuery function
     </script>
+
+    <script>
+        $(document).ready(function(){
+        //Select any input submit on hover and do CSS to it
+            $(":submit").hover(function(){//get the submit input
+                $(this).css("background-color", "green");//When you first start to hover change to a light grey background
+                }, function(){
+                $(this).css("background-color", "#f1f1f1"); //change it back once you leave
+            }); // End over
+        });// end JQuery function
+    </script>
+
     <script>
       $( "span" ).click(function() {
         $( "li" ).each(function() {
@@ -28,6 +40,34 @@
         });
       });
     </script>
+      <script>
+        class User{
+          constructor(username,email,weight){
+              this.username = username;
+              this.email = email;
+              this.weight = weight;
+          }
+          display(){
+            console.log("User Data - UN: " + this.username + " Email: " + this.email + " Current Weight: " + this.weight);
+          }
+        }
+      </script>
+
+      <script>
+        function whoAmI(){
+          let un = document.getElementById("UN").textContent;
+          let em = document.getElementById("Email").textContent;
+          let w = document.getElementById("Weight").textContent;
+          /*console.log(un);
+          console.log(em);
+          console.log(w);*/
+          const me = new User(un,em,w);
+          /*console.log(me.username);
+          console.log(me.email);
+          console.log(me.weight);*/
+          me.display();
+        }
+      </script>
 
     <style>
     /* Column container */
@@ -47,7 +87,7 @@
     /* Main column which will hold a chart of user weight and form for updating*/
     .weight {
       flex: 70%;
-      background-color: #f1f1f1;
+      background-color: white;
       padding: 20px;
       align-items: center;
       text-align: center;
@@ -64,12 +104,12 @@
         border:1px solid #a9a9a9;
         height:34px;
         line-height:34px;
-        width:100px;
+        width:125px;
         margin-bottom:20px;
         padding-left:5px;
     }
     form{
-      text-align: center;
+      text-align: left;
     }
     #btn{
         background:green;
@@ -86,10 +126,26 @@
     .profile-pic {
       background-color: #aaa;
       /*width: 100%;*/
-      padding: 20px;
+      /*padding: 20px;*/
       max-width: 300px;
       min-width: 150px;
+      display:flex;
     }
+    /* Inside the Profile-pic Div */
+     .proimg{
+          background-color: #aaa;
+          max-width: 100%;
+          height: auto;
+          object-fit: fill;
+     }
+
+     .proimgRound{
+          background-color: #aaa;
+          max-width: 100%;
+          height: auto;
+          object-fit: fill;
+          border-radius: 50%;
+     }
 
 
     /* Header/logo Title */
@@ -111,9 +167,11 @@
 
     p b{
       color: purple;
-      font-size: 0.5in;
+      font-size: 0.15in;
       font-style: italic;
-      border: purple dotted;
+    }
+    span u{
+      color: blue;
     }
 
     #goals{ /*I am going to style my bottom div via ID Selector rather than class */
@@ -168,12 +226,9 @@
       float:right;
       text-align:center;
     }
-    #update_dl{
-      width:250px;
-    }
 
     /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 950px) {
       .row{
         flex-direction: column;
       }
@@ -183,16 +238,26 @@
       .profile-pic{
         margin: auto;
       }
+      form{
+      text-align: center;
+      }
     }
 
   </style>
-
+    <script>
+        $(document).ready(function(){ // Make sure the DOM us loaded & toggle profile Pic
+          $("#pro_pic").click(function(){
+            $("#the_pic").toggleClass('proimg proimgRound');
+          });
+        });
+      </script>
   </head>
 
     <div class="header">
-      <h1 id="myUN">UserPage for {{ user.username }}</h1>
-      <p>Memeber since: <b>Insert Date Here</b></p>
+      <h1 id="myUN">User Page for: <span id="UN">{{ user.username }}</span></h1>
+      <h1>User Email: <span id="Email"><u>{{ current_user.email }}</u></span></h1>
       <p>Member since: <b>{{ user.registered_on }}</b></p>
+      <p onclick="whoAmI()" style="color: red;">Click here to see who I am with ES6 Javascript classes (check the Log)</p>
     </div>
 
     <p id="feedback" style= "color: red; text-align: center;"></p>
@@ -202,31 +267,51 @@
       <div class="info">
         <h2>About Me and my Current lifts</h2>
         <h5>Photo of me:</h5>
-        <div class="profile-pic" style="height:200px;" id="pro_pic">Image</div>
+        <div class="profile-pic" style="height:200px;" id="pro_pic">
+          <img class="proimg" id="the_pic"src="{{ url_for('static', filename='img/Tom.jpg') }}" alt="File Not Found">
+        </div>
         <p>And Below are some of my current lifts.</p>
 
         <h3>Current 1 rep maxes</h3>
 
-        <p>Squat: <span id="squat">255</span></p>
-        <p>Bench: <span id="bench">215</span></p>
-        <p>Deadlift: <span id="deadlift">335</span></p>
-        <form method="post" action="{{ url_for('update_dl', username=current_user.username) }}">
-          <input type="number" id="new_dl" name="new_dl"
-                 min="1" max="1000" placeholder="Enter your new Deadlift Record">
-          <input id="update_dl" type="submit" value="Submit">
-        </form>
-        <p>OHP: <span id="ohp">135</span></p>
+        <p>Squat: <span id="squat">{{ current_user.squat1rm }}</span></p>
+            <form method="post" action="{{ url_for('update_squat', username=current_user.username) }}">
+              <input type="number" id="new_squat" name="new_squat"
+                 min="1" max="500" placeholder="Enter new squat">
+              <input id="update_squat" type="submit" value="Submit">
+            </form>
+
+        <p>Bench: <span id="bench">{{ current_user.bench1rm }}</span></p>
+            <form method="post" action="{{ url_for('update_bench', username=current_user.username) }}">
+              <input type="number" id="new_bench" name="new_bench"
+                 min="1" max="500" placeholder="Enter new Bench">
+              <input id="update_bench" type="submit" value="Submit">
+            </form>
+
+        <p>Deadlift: <span id="deadlift">{{ current_user.dl1rm }}</span></p>
+            <form method="post" action="{{ url_for('update_dl', username=current_user.username) }}">
+              <input type="number" id="new_dl" name="new_dl"
+                 min="1" max="700" placeholder="Enter your new Deadlift Record">
+              <input id="update_dl" type="submit" value="Submit">
+            </form>
+
+        <p>OHP: <span id="ohp">{{ current_user.press1rm }}</span></p>
+            <form method="post" action="{{ url_for('update_ohp', username=current_user.username) }}">
+              <input type="number" id="new_ohp" name="new_ohp"
+                 min="1" max="350" placeholder="Enter your new Press Record">
+              <input id="update_ohp" type="submit" value="Submit">
+            </form>
         <br>
 
       </div> <!--End info-->
 
       <div class="weight">
-        <h2>Weight for User: {{ current_user.username }}</h2>
+        <h2 id="username">Weight for User: {{ current_user.username }}</h2>
+        <h2 id="user-weight">Most Recent Weight: <span id="Weight">{{ current_user.weight }}</span></h2>
         <h5>Enter your weight for today: </h5>
-        <form id="weightEntry" method="post" onsubmit="return validate()">
-          <!--If validate returns True the form is submitted if False not submitted-->
-          <input type="text" name="weight" id="weight" placeholder="EnterWeight">
-          <input id="btn" type="submit" value="Submit">
+        <form id="weightEntry" method="post" action="{{ url_for('update_weight', username=current_user.username) }}" style="text-align:center;">
+          <input type="number" name="enter-weight" id="enter-weight" min="1" max="350" placeholder="EnterWeight">
+          <input id="btn" type="submit" value="Submit" style="color: black;">
         </form>
 
         <div class="chart">
@@ -260,8 +345,8 @@
         </div>
 
         <div class="right">
-          <h1 style="text-align: center;">More Here</h1>
-          <p>Hopefully As I add more text to here the problem will resolve</p>
+          <h1 style="text-align: center;">Top Accomplishments</h1>
+          <p>Hopefully Users will add stuff about themselves here</p>
           <p>This guy will be italic</p>
         </div>
 
