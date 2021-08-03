@@ -13,9 +13,9 @@
         }
         async function sleepTest(){
             console.log("start");
-            await sleep(5000); // hopefully this casues the page to sleep for 5 secs
+            await sleep(10000); // hopefully this causes the page to sleep for 5 secs
             console.log("End");
-            alert("Hopefully this message pops up after 5 seconds");
+            //alert("Hopefully this message pops up after 10 seconds");
             document.getElementById('link').setAttribute("class", "link_show");
             /*$("#link")(function(){
                 console.log("Am I getting here")
@@ -29,6 +29,9 @@
     </script>
 
     <style>
+        body{
+          background-image: url("{{ url_for('static', filename='img/Logo.jpg') }}");
+        }
         .link{
             text-align: center;
             font-size: 1in;
@@ -39,24 +42,31 @@
         .link_show{
             text-align: center;
             font-size: 1in;
-            color: green;
+            color: red;
             display: block;
             border: 2px dotted purple;
         }
         h1 + p{
-          color: green;
+          color: orange;
+          font-weight:bold;
           text-align: center;
+          font-size: 0.75in;
+        }
+        h1{
+          color:white;
+          font-size: 0.50in;
+          text-align:center;
         }
     </style>
   </head>
   <body>
-    <h1>404 Page Not Found!</h1>
+    <h1>404 Page Not Found! Thankfully I can make custom Error pages!</h1>
     <p>Boo! Stop trying to brake my webpage with URL's that don't exist. As punishment you must sit here for
-      5 seconds before I allow you to return to safety. </p>
+      10 seconds before I allow you to return to safety. </p>
 
     <p id="link" class="link">Now click <b><a href="{{ url_for('index') }}">Here</a></b>and get out of here</p>
 
-    <h1 onclick="sleepTest()">Click on me and see if I wait for 5 seconds</h1>
+    <!-- <h1 onclick="sleepTest()">Click on me and see if I wait for 10 seconds</h1> -->
 
   </body>
 </html>
