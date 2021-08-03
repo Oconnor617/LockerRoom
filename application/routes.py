@@ -2,7 +2,7 @@
 Created June 16, 2021
 @author: oconn
 """
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from application import app, db, mail
 from application.models import User
 from flask_login import current_user, login_user, logout_user, login_required
@@ -23,8 +23,9 @@ def index():
               "")
         return render_template('index.html')
 
-    else: # It is a GET Request
+    else:  # It is a GET Request
         return render_template('index.html')
+
 
 #############################################################################################
 # Routes for user entrance/exit into app
@@ -33,7 +34,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 # the methods specify the HTTP request methods
 def login():
-    if current_user.is_authenticated: # Auto redirect if they are already logged in
+    if current_user.is_authenticated:  # Auto redirect if they are already logged in
         return redirect(url_for('index'))
     if request.method == 'POST':
         # Get the data from the post
@@ -42,7 +43,7 @@ def login():
         print(username)
         print(password)
         # flash('from the server-side. Username ' + username + 'password: ' + password )
-        #return render_template('login.html', title='Sign In')
+        # return render_template('login.html', title='Sign In')
         user = User.query.filter_by(username=username).first()
         if user is None or not user.check_password(password):
             flash('This is Server-side validation: Invalid username or password')
@@ -103,15 +104,123 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
 #############################################################################################
 # Routes for user pages - profile page and message board
 #############################################################################################
 
 
 @app.route('/user/<username>')  # each user page will have a unique URL
-@login_required # You must be logged in as that user to access that specific user page URL
+@login_required  # You must be logged in as that user to access that specific user page URL
 # Flask-Login ensures that a user must be logged in to access. It will redirect to /login
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()  # search the db for the UN passed in
     # The above will send a 404 back to the client browser if no user is found
     return render_template('user.html', user=user)
+
+
+#############################################################################################
+# Routes for updating DB - profile page and message board
+#############################################################################################
+
+@app.route('/update_dl/<username>', methods=['GET', 'POST'])
+@login_required  # You must be logged in as a user to update a 1rm
+def update_dl(username):
+    user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
+    if request.method == 'POST':
+        new_dl = request.form['new_dl']
+        if new_dl == '':
+            flash('More Server-Side Validation. Please enter a Number')
+            return redirect(url_for('user', username=user.username))
+        user.set_dl(new_dl) # update the DB
+        db.session.add(user)
+        db.session.commit()
+        flash("Your Deadlift Max has been updated")
+        # return render_template('user.html', user=user)
+        return redirect(url_for('user', username=user.username))
+    else:  # Must be a GET
+        return render_template('user.html', user=user)
+
+
+@app.route('/update_ohp/<username>', methods=['GET', 'POST'])
+@login_required  # You must be logged in as a user to update a 1rm
+def update_ohp(username):
+    user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
+    if request.method == 'POST':
+        new_ohp = request.form['new_ohp']
+        if new_ohp == '':
+            flash('More Server-Side Validation. Please enter a Number')
+            return redirect(url_for('user', username=user.username))
+        user.set_ohp(new_ohp) # update the DB
+        db.session.add(user)
+        db.session.commit()
+        flash("Your Press Max has been updated")
+        # return render_template('user.html', user=user)
+        return redirect(url_for('user', username=user.username))
+    else:  # Must be a GET
+        return render_template('user.html', user=user)
+
+
+@app.route('/update_squat/<username>', methods=['GET', 'POST'])
+@login_required  # You must be logged in as a user to update a 1rm
+def update_squat(username):
+    user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
+    if request.method == 'POST':
+        new_squat = request.form['new_squat']
+        if new_squat == '':
+            flash('More Server-Side Validation. Please enter a Number')
+            return redirect(url_for('user', username=user.username))
+        user.set_squat(new_squat) # update the DB
+        db.session.add(user)
+        db.session.commit()
+        flash("Your Squat Max has been updated")
+        # return render_template('user.html', user=user)
+        return redirect(url_for('user', username=user.username))
+    else:  # Must be a GET
+        return render_template('user.html', user=user)
+
+
+@app.route('/update_bench/<username>', methods=['GET', 'POST'])
+@login_required  # You must be logged in as a user to update a 1rm
+def update_bench(username):
+    user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
+    if request.method == 'POST':
+        new_bench = request.form['new_bench']
+        if new_bench == '':
+            flash('More Server-Side Validation. Please enter a Number')
+            return redirect(url_for('user', username=user.username))
+        user.set_bench(new_bench) # update the DB
+        db.session.add(user)
+        db.session.commit()
+        flash("Your Press Max has been updated")
+        # return render_template('user.html', user=user)
+        return redirect(url_for('user', username=user.username))
+    else:  # Must be a GET
+        return render_template('user.html', user=user)
+
+
+@app.route('/update_weight/<username>', methods=['GET', 'POST'])
+@login_required  # You must be logged in as a user to update a 1rm
+def update_weight(username):
+    user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
+    if request.method == 'POST':
+        new_weight = request.form['enter-weight']
+        if new_weight == '':
+            flash('More Server-Side Validation. Please enter a Number')
+            return redirect(url_for('user', username=user.username))
+        user.set_weight(new_weight) # update the DB
+        db.session.add(user)
+        db.session.commit()
+        flash("Your weight has been updated")
+        # return render_template('user.html', user=user)
+        return redirect(url_for('user', username=user.username))
+    else:  # Must be a GET
+        return render_template('user.html', user=user)
+
+#@app.route('check_un', methods=['GET', 'POST'])
+#def check_un(): #I am not sure if this needs perameters or not
+#    # GET Request
+#    if request.method == 'GET':
+#        message = {'here': 'Returning GET'}
+#        return jsonify(message) #serialize and add JSPN headers
+#    if request.method == 'POST':
