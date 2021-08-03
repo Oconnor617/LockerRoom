@@ -33,13 +33,6 @@
         });// end JQuery function
     </script>
 
-    <script>
-      $( "span" ).click(function() {
-        $( "li" ).each(function() {
-          $( this ).toggleClass( "example" );
-        });
-      });
-    </script>
       <script>
         class User{
           constructor(username,email,weight){
@@ -112,8 +105,8 @@
       text-align: left;
     }
     #btn{
-        background:green;
-        color:#fff;
+        /*background:green;*/
+        color:black;
         font-size:14px;
         width:90px;
         line-height:34px;
@@ -311,7 +304,7 @@
         <h5>Enter your weight for today: </h5>
         <form id="weightEntry" method="post" action="{{ url_for('update_weight', username=current_user.username) }}" style="text-align:center;">
           <input type="number" name="enter-weight" id="enter-weight" min="1" max="350" placeholder="EnterWeight">
-          <input id="btn" type="submit" value="Submit" style="color: black;">
+          <input id="btn" type="submit" value="Submit">
         </form>
 
         <div class="chart">

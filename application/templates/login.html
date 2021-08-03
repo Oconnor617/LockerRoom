@@ -92,12 +92,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    <p id="feedback"></p>
+
     <h1 style="text-align:center;">Sign into the LockerRoom</h1>
         <div id="logo-container">
             <img id="login-logo" src="{{ url_for('static', filename='img/Logo.jpg') }}" alt=" Logo File Not Found">
         </div>
 
-        <h2 id="toggle" style="text-align: center;">Click on me to toggle the Logo Display</h2>
+<h2 id="toggle" style="text-align: center; color: blue;"><u>Click on me to toggle the Logo Display</u></h2>
         <h1 style="text-align: center;">Enter your credentials below</h1>
         <form id="loginForm" method="post" onsubmit="return validate()">
             <!--If validate returns True the form is submitted if False not submitted-->
