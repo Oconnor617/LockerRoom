@@ -37,7 +37,7 @@
             cursor:pointer;
             margin:20px 20px 0 0;
         }
-        #ajax_btn{/* ID Slector */
+        #ajax_btn{/* ID Selector */
             background:blue;
             color:#fff;
             font-size:14px;
@@ -51,6 +51,13 @@
           color: red;
           text-align: center;
         }
+        .logo-big{
+          width: 150px;
+          height: 150px;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
     </style>
   </head>
   {% extends "base.html" %}
@@ -58,6 +65,8 @@
   {% block content %}
   <body>
     <h1 style="text-align: center;">A Registration Form</h1>
+    <img class="logo-big" id="reg-logo" src="{{ url_for('static', filename='img/Logo.jpg') }}" alt=" Logo File Not Found">
+    <br>
     <form id="regForm" onsubmit="return validate()" method="post"> <!--If validate returns True the form is submitted if False not submitted-->
       <div>
         <input id="username" type="text" placeholder="Username" name="regName"><br>
@@ -84,7 +93,7 @@
       </div>
 
       <div>
-        <input class="myButton" id="ajax_btn" type="reset" value="Reset" onclick="clearEntry()">
+        <input class="myButton" id="ajax_btn"  value="check with Ajax" onclick="ajaxTest()">
       </div>
     </form>
 
@@ -126,6 +135,9 @@
       document.getElementById('un_error').innerHTML = ' ';
       document.getElementById('email_error').innerHTML = ' ';
       document.getElementById('pw_error').innerHTML = ' ';
+   }
+   async function ajaxTest(){
+      let un = document.getElementById("username").value;//this will be our data for the fetch
    }
   </script>
     <p id="demo"></p>

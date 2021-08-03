@@ -168,6 +168,9 @@
       float:right;
       text-align:center;
     }
+    #update_dl{
+      width:250px;
+    }
 
     /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
     @media screen and (max-width: 800px) {
@@ -207,6 +210,11 @@
         <p>Squat: <span id="squat">255</span></p>
         <p>Bench: <span id="bench">215</span></p>
         <p>Deadlift: <span id="deadlift">335</span></p>
+        <form method="post" action="{{ url_for('update_dl', username=current_user.username) }}">
+          <input type="number" id="new_dl" name="new_dl"
+                 min="1" max="1000" placeholder="Enter your new Deadlift Record">
+          <input id="update_dl" type="submit" value="Submit">
+        </form>
         <p>OHP: <span id="ohp">135</span></p>
         <br>
 
