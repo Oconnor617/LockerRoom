@@ -11,3 +11,6 @@ from application.models import User
 def make_shell_context():
     return {'db': db, 'User': User}  # this will auto import these into the shell so they can be user directly
 # typing 'flask shell' to the terminal will start the Python interpreter IN the context of the app
+
+if __name__ == '__main__':  # Script executed directly?
+    app.run(debug=True)  # Launch built-in web server and run this Flask webapp
