@@ -15,10 +15,11 @@ class User(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, nullable=True, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
     registered_on = db.Column(db.DateTime, nullable=True)
-    dl1rm = db.Column(db.Numeric(10, 2), default=100)
-    bench1rm = db.Column(db.Numeric(10, 2), default=0)
-    squat1rm = db.Column(db.Numeric(10, 2), default=0)
-    press1rm = db.Column(db.Numeric(10, 2), default=0)
+    dl1rm = db.Column(db.Numeric(10, 2), default=185)
+    bench1rm = db.Column(db.Numeric(10, 2), default=135)
+    squat1rm = db.Column(db.Numeric(10, 2), default=155)
+    press1rm = db.Column(db.Numeric(10, 2), default=95)
+    weight = db.Column(db.Numeric(10, 2), default=150)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def set_reg_time(self):
@@ -38,10 +39,13 @@ class User(UserMixin, db.Model):
         self.bench1rm = newBench
 
     def set_squat(self, newSq):
-        self.squaat1rm = newSq
+        self.squat1rm = newSq
 
-    def set_dl(self, newPress):
+    def set_ohp(self, newPress):
         self.press1rm = newPress
+
+    def set_weight(self, newWeight):
+        self.weight = newWeight
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
