@@ -56,7 +56,7 @@
         div.equip > * {
             color: black;
             font-style: italic;
-            font-style: bold;
+            font-weight: bold;
             font-size: 15px;
         }
 
@@ -144,7 +144,7 @@
         p + span{ /* Adjacency Selector for the Management Discription */
             color:darkorange;
             font-style: italic;
-            font-style: bold;
+            font-weight: bold;
         }
 
         /* Header */
@@ -203,7 +203,7 @@
             let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=' + mykey;
             let response = await fetch(url, {mode: "cors"});// wait until the Promise is resolved until JS continues
             let data = await response.json(); // make the response into a useful Data object
-            console.log(data.weather);
+            //console.log(data.weather);
             $('#Lat').html('<u>Latitude:</u> ' + data.coord.lat);
             $('#Lon').html('   <u>Longitude:</u> ' + data.coord.lon);
             $('#Weather').html('<u>Current Weather:</u> ' + data.weather[0].main);
@@ -213,15 +213,15 @@
             let f = far.toFixed(2);
             $('#Temp').html('<u>Temperature:</u> ' + f + ' F');
             $('#test1').html('Below are the weather details for Milton, MA');
-            console.log(data);
-            console.log(data.base);
+            //console.log(data);
+            //console.log(data.base);
         }
     </script>
     <script>
         async function testRun(){
           let mylat = 42.2495;
           let mylon = -71.0662;
-          console.log("Lat: " + mylat + "Lon: " + mylon);
+          //console.log("Lat: " + mylat + "Lon: " + mylon);
           await fetchWeather(mylat, mylon); // hopefully this is still Async
         }
     </script>

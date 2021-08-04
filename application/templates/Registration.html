@@ -144,7 +144,7 @@
       function validate(){
         let ok = true;
         let un = document.getElementById("username").value;
-        console.log(typeof(un));
+        //console.log(typeof(un));
         let email = document.getElementById("email").value;
         let pw = document.getElementById("password").value;
         let pwR = document.getElementById("retype").value;
@@ -166,10 +166,10 @@
         }
         else{
           window.alert("This is Client Side Validation. See Below for the reasons why this form was rejected");
-              console.log("Username: " + un);
-              console.log("email: " + email);
-              console.log("Password: " + pw);
-              console.log("Retype: " + pwR);
+              //console.log("Username: " + un);
+              //console.log("email: " + email);
+              //console.log("Password: " + pw);
+              //console.log("Retype: " + pwR);
           return false;
         }
   }
@@ -181,27 +181,25 @@
    }
    async function ajaxTest(){
       let un = document.getElementById("ajax-un").value;//this will be our data for the fetch
-      console.log(un);
+      //console.log(un);
       var entry = { name: un };
 
       fetch("/check_un", {
           method: "POST",
-          credentials: "include",
           body: JSON.stringify(entry),
-          cache: "no-cache",
           headers: new Headers({
             "content-type": "application/json"
           })
         })
-        .then(function (response) {
+        .then(function (response) {// I pass back two arrays, the data and the response code
           if (response.status !== 200) {
             console.log(`Looks like there was a problem. Status code: ${response.status}`);
             return;
           }
-          response.json().then(function (data) {
-            console.log(data);
-            let status = data[0].Message
-            console.log(status);
+          response.json().then(function (data) {// must have come through correctly. use Json to make the data useful
+            //console.log(data);
+            let status = data[0].Message // Text content of the response either taken or free
+            //console.log(status);
             $("#ajax-res").html("My AJAX Fetch call says that username: " + un + " is " + status);
           });
         })
