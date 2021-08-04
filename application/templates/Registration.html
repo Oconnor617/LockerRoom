@@ -125,6 +125,16 @@
         <input class="myButton" id="reset_btn" type="reset" value="Reset" onclick="clearEntry()">
       </div>
 
+      <!--<div>
+        <input class="myButton" id="ajax_btn"  type=submit value="check with Ajax" onclick="ajaxTest()">
+      </div>-->
+    </form><br>
+
+    <form id="AjaxForm" onsubmit="return false" method="post">
+      <div>
+        <input id="ajax-un" type="text" placeholder="Username to check" name="regName"><br>
+                          <span id="ajax-res"></span>
+      </div>
       <div>
         <input class="myButton" id="ajax_btn"  type=submit value="check with Ajax" onclick="ajaxTest()">
       </div>
@@ -170,8 +180,36 @@
       document.getElementById('pw_error').innerHTML = ' ';
    }
    async function ajaxTest(){
-      let un = document.getElementById("username").value;//this will be our data for the fetch
-   }
+      let un = document.getElementById("ajax-un").value;//this will be our data for the fetch
+      console.log(un);
+      var entry = { name: un };
+
+      fetch("/check_un", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify(entry),
+          cache: "no-cache",
+          headers: new Headers({
+            "content-type": "application/json"
+          })
+        })
+        .then(function (response) {
+          if (response.status !== 200) {
+            console.log(`Looks like there was a problem. Status code: ${response.status}`);
+            return;
+          }
+          response.json().then(function (data) {
+            console.log(data);
+            let status = data[0].Message
+            console.log(status);
+            $("#ajax-res").html("My AJAX Fetch call says that username: " + un + " is " + status);
+          });
+        })
+        .catch(function (error) {
+          console.log("Fetch error: " + error);
+        });
+
+   }//End ajaxTest()
   </script>
     <p id="demo"></p>
 {% endblock %}

@@ -2,7 +2,7 @@
 Created June 16, 2021
 @author: oconn
 """
-from flask import render_template, request, flash, redirect, url_for, jsonify
+from flask import render_template, request, flash, redirect, url_for, jsonify, make_response
 from application import app, db, mail
 from application.models import User
 from flask_login import current_user, login_user, logout_user, login_required
@@ -217,10 +217,23 @@ def update_weight(username):
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
-#@app.route('check_un', methods=['GET', 'POST'])
-#def check_un(): #I am not sure if this needs perameters or not
-#    # GET Request
-#    if request.method == 'GET':
-#        message = {'here': 'Returning GET'}
-#        return jsonify(message) #serialize and add JSPN headers
-#    if request.method == 'POST':
+@app.route('/check_un', methods=['GET', 'POST'])
+def check_un(): #I am not sure if this needs perameters or not
+    # GET Request
+    if request.method == 'GET':
+        message = {'here': 'Returning GET'}
+        return jsonify(message) #serialize and add JSPN headers
+    if request.method == 'POST':
+        req = request.get_json()
+        print(req)
+        un_req = req['name']
+        print(un_req)
+        user = User.query.filter_by(username=un_req).first() #Check the database for this username
+        if user is None: # we did not find this Username in the DB
+            res = make_response(jsonify({'Message': 'Free'}, 200))
+            return res
+        else:
+            res = make_response(jsonify({'Message': 'Taken'}, 200))
+            return res
+    else:
+        print('I am pretty sure I should not get here')
