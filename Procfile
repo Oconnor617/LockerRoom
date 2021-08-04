@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn lockerroompi:app
+web: flask db upgrade; gunicorn lockerroom:app
