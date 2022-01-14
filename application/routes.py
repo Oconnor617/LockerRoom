@@ -119,6 +119,13 @@ def user(username):
     return render_template('user.html', user=user)
 
 
+@app.route('/message') # a route for rendering the message board
+@login_required # you must be logged in to access the message board - Might add email validated as a requirment later
+def message():
+    # They should already be logged in so jsut render the message board
+    # I can add a check here later to make sure th user validated their email before they are allowed to view/post a message
+    return render_template('message.html')
+
 #############################################################################################
 # Routes for updating DB - profile page and message board
 #############################################################################################
