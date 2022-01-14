@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Locker Room Message Board</title>
+    <!-- <script src="jquery-3.5.1.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+    $(document).ready(function(){
+    //Select the P element on hover and do CSS to it
+        $("#feedback").hover(function(){//get the new user p and link
+            $(this).css("font-size", "25px");//When you first start to hover change to yellow
+            }, function(){
+            $(this).css("font-size", "14px"); //change it back once you leave
+        });
+    });// end JQuery function
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/message.css') }}">
+
+</head>
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p id="feedback">This is Toggleable</p>
+    <h1>This is going to be the Message Board Page</h1>
+    <p>But first let's play around with the style sheet first</p>
+    <h2>I gotta get better at design
+
+        <p id="nested">And I <span>will</span></p>
+
+        <P>Should be effected</P>
+    </h2>
+
+
+{% endblock %}
+</html>
