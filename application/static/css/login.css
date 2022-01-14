@@ -1,0 +1,63 @@
+input{
+    border:1px solid #a9a9a9;
+    height:34px;
+    line-height:34px;
+    width:500px;
+    margin-bottom:20px;
+    padding-left:5px;
+}
+form{
+  text-align: center;
+}
+#btn{
+    background:green;
+    color:#fff;
+    font-size:14px;
+    width:120px;
+    line-height:34px;
+    border:none 0;
+    cursor:pointer;
+    margin:20px 20px 0 0;
+}
+.myButton{
+    background:red;
+    color:#fff;
+    font-size:14px;
+    width:120px;
+    line-height:34px;
+    border:none 0;
+    cursor:pointer;
+    margin:20px 20px 0 0;
+}
+#feedback{
+  color: red;
+  text-align:center;
+}
+#new_user{
+color: purple;
+text-align: center;
+font-size: 14px;
+
+}
+p a{ /* Decendent Selector - override the color above */
+color:blue;
+}
+
+#logo-container{ /* ID Selector */
+   align-items: center;
+  }
+#login-logo{ /* ID Selector */
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+  }
+
+/* Responsive layout - when the screen is less than 800px wide */
+@media screen and (max-width: 800px) {
+input {
+    width:200px;
+ }
+ h1, h2{
+ font-size: 14px;
+ }
+}
