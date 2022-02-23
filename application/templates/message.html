@@ -32,6 +32,27 @@
 
         <P>Should be effected</P>
     </h2>
+    <div id="messages">
+        <!--This Div could be where the Messages are displayed-->
+        <ul class="list-group">Messages
+            {% for post in posts %}
+            <li class="list-group-item">
+            {{ post.author.username }} says: <b>{{ post.body }}</b>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="message-box">
+        <form id="submit-message" method="post" action="{{ url_for('main.message', username=current_user.username) }}">
+            <input type="text" name="post" id="user-message" placeholder="Type a Message">
+            <br>
+            <input id="btn" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <h1 class="text-primary">
+        Get started with Bootstrap is this big?
+    </h1>   
 
 
 {% endblock %}

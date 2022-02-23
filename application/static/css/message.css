@@ -7,6 +7,17 @@ input{
     padding-left:5px;
 }
 
+#btn{
+  background:green;
+  color:#fff;
+  font-size:14px;
+  width:120px;
+  line-height:34px;
+  border:none 0;
+  cursor:pointer;
+  margin:20px 20px 0 0;
+}
+
 form{
   text-align: center;
 }

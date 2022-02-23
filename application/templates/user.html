@@ -268,28 +268,28 @@
         <h3>Current 1 rep maxes</h3>
 
         <p>Squat: <span id="squat">{{ current_user.squat1rm }}</span></p>
-            <form method="post" action="{{ url_for('update_squat', username=current_user.username) }}">
+            <form method="post" action="{{ url_for('main.update_squat', username=current_user.username) }}">
               <input type="number" id="new_squat" name="new_squat"
                  min="1" max="500" placeholder="Enter new squat">
               <input id="update_squat" type="submit" value="Submit">
             </form>
 
         <p>Bench: <span id="bench">{{ current_user.bench1rm }}</span></p>
-            <form method="post" action="{{ url_for('update_bench', username=current_user.username) }}">
+            <form method="post" action="{{ url_for('main.update_bench', username=current_user.username) }}">
               <input type="number" id="new_bench" name="new_bench"
                  min="1" max="500" placeholder="Enter new Bench">
               <input id="update_bench" type="submit" value="Submit">
             </form>
 
         <p>Deadlift: <span id="deadlift">{{ current_user.dl1rm }}</span></p>
-            <form method="post" action="{{ url_for('update_dl', username=current_user.username) }}">
+            <form method="post" action="{{ url_for('main.update_dl', username=current_user.username) }}">
               <input type="number" id="new_dl" name="new_dl"
                  min="1" max="700" placeholder="Enter your new Deadlift Record">
               <input id="update_dl" type="submit" value="Submit">
             </form>
 
         <p>OHP: <span id="ohp">{{ current_user.press1rm }}</span></p>
-            <form method="post" action="{{ url_for('update_ohp', username=current_user.username) }}">
+            <form method="post" action="{{ url_for('main.update_ohp', username=current_user.username) }}">
               <input type="number" id="new_ohp" name="new_ohp"
                  min="1" max="350" placeholder="Enter your new Press Record">
               <input id="update_ohp" type="submit" value="Submit">
@@ -302,7 +302,7 @@
         <h2 id="username">Weight for User: {{ current_user.username }}</h2>
         <h2 id="user-weight">Most Recent Weight: <span id="Weight">{{ current_user.weight }}</span></h2>
         <h5>Enter your weight for today: </h5>
-        <form id="weightEntry" method="post" action="{{ url_for('update_weight', username=current_user.username) }}" style="text-align:center;">
+        <form id="weightEntry" method="post" action="{{ url_for('main.update_weight', username=current_user.username) }}" style="text-align:center;">
           <input type="number" name="enter-weight" id="enter-weight" min="1" max="350" placeholder="EnterWeight">
           <input id="btn" type="submit" value="Submit">
         </form>

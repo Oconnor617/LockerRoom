@@ -4,12 +4,12 @@ Created on July 15, 2021
 @author: oconn
 """
 from application import app, db
-from application.models import User
+from application.models import User, Post
 
 
 @app.shell_context_processor  # This make it easier to run tests in teh python shell
 def make_shell_context():
-    return {'db': db, 'User': User}  # this will auto import these into the shell so they can be user directly
+    return {'db': db, 'User': User, 'Post': Post}  # this will auto import these into the shell so they can be user directly
 # typing 'flask shell' to the terminal will start the Python interpreter IN the context of the app
 
 if __name__ == '__main__':  # Script executed directly?

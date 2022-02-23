@@ -3,17 +3,18 @@ Created June 16, 2021
 @author: oconn
 """
 from flask import render_template, request, flash, redirect, url_for, jsonify, make_response
-from application import app, db, mail
-from application.models import User
+from application import db
+from application.models import Post, User
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from application.email import send_password_reset_email, send_auth_email
+from application.auth.email import send_password_reset_email, send_auth_email
 from flask_mail import Message
 import datetime
+from application.main import bp
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         # Get the data from the post
@@ -26,7 +27,7 @@ def index():
     else:  # It is a GET Request
         return render_template('index.html')
 
-
+"""
 #############################################################################################
 # Routes for user entrance/exit into app
 #############################################################################################
@@ -103,6 +104,7 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+    """
 
 
 #############################################################################################
@@ -110,7 +112,7 @@ def logout():
 #############################################################################################
 
 
-@app.route('/user/<username>')  # each user page will have a unique URL
+@bp.route('/user/<username>')  # each user page will have a unique URL
 @login_required  # You must be logged in as that user to access that specific user page URL
 # Flask-Login ensures that a user must be logged in to access. It will redirect to /login
 def user(username):
@@ -119,18 +121,28 @@ def user(username):
     return render_template('user.html', user=user)
 
 
-@app.route('/message') # a route for rendering the message board
+@bp.route('/message/<username>', methods=['GET', 'POST']) # a route for rendering the message board
 @login_required # you must be logged in to access the message board - Might add email validated as a requirment later
-def message():
+def message(username):
     # They should already be logged in so jsut render the message board
     # I can add a check here later to make sure th user validated their email before they are allowed to view/post a message
-    return render_template('message.html')
+    if request.method == 'POST':
+        user = User.query.filter_by(username=username).first_or_404()  # search the db for the UN passed in
+        new_post = request.form['post'] #search the form dictionary for their new Message
+        print("The Message is: {}".format(new_post))
+        p = Post(body=new_post, author=user) #create a new Post entry with the message and user as the author
+        db.session.add(p)
+        db.session.commit() #New message added to the Posts table
+        posts = Post.query.all()
+        return render_template('message.html', posts=posts)
+    posts = Post.query.all()
+    return render_template('message.html', posts=posts) #Get Request. This should just render the message board with the current Posts
 
 #############################################################################################
 # Routes for updating DB - profile page and message board
 #############################################################################################
 
-@app.route('/update_dl/<username>', methods=['GET', 'POST'])
+@bp.route('/update_dl/<username>', methods=['GET', 'POST'])
 @login_required  # You must be logged in as a user to update a 1rm
 def update_dl(username):
     user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
@@ -149,7 +161,7 @@ def update_dl(username):
         return render_template('user.html', user=user)
 
 
-@app.route('/update_ohp/<username>', methods=['GET', 'POST'])
+@bp.route('/update_ohp/<username>', methods=['GET', 'POST'])
 @login_required  # You must be logged in as a user to update a 1rm
 def update_ohp(username):
     user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
@@ -168,7 +180,7 @@ def update_ohp(username):
         return render_template('user.html', user=user)
 
 
-@app.route('/update_squat/<username>', methods=['GET', 'POST'])
+@bp.route('/update_squat/<username>', methods=['GET', 'POST'])
 @login_required  # You must be logged in as a user to update a 1rm
 def update_squat(username):
     user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
@@ -187,7 +199,7 @@ def update_squat(username):
         return render_template('user.html', user=user)
 
 
-@app.route('/update_bench/<username>', methods=['GET', 'POST'])
+@bp.route('/update_bench/<username>', methods=['GET', 'POST'])
 @login_required  # You must be logged in as a user to update a 1rm
 def update_bench(username):
     user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
@@ -206,7 +218,7 @@ def update_bench(username):
         return render_template('user.html', user=user)
 
 
-@app.route('/update_weight/<username>', methods=['GET', 'POST'])
+@bp.route('/update_weight/<username>', methods=['GET', 'POST'])
 @login_required  # You must be logged in as a user to update a 1rm
 def update_weight(username):
     user = User.query.filter_by(username=username).first_or_404()  # make sure we get the user who passed the data
@@ -224,7 +236,7 @@ def update_weight(username):
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
-@app.route('/check_un', methods=['GET', 'POST'])
+@bp.route('/check_un', methods=['GET', 'POST'])
 def check_un(): #I am not sure if this needs perameters or not
     # GET Request
     if request.method == 'GET':
