@@ -3,9 +3,10 @@ Start Here, run app from browser at 127.0.0.1:5000
 Created on July 15, 2021
 @author: oconn
 """
-from application import app, db
+from application import create_app, db
 from application.models import User, Post
 
+app = create_app() # now the app is created at runtime and no longer a global variable
 
 @app.shell_context_processor  # This make it easier to run tests in teh python shell
 def make_shell_context():
