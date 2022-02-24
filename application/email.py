@@ -4,8 +4,8 @@ Created on Aug 1, 2021
 Issues:
 """
 from flask_mail import Message
-from application import app, mail
-from flask import render_template
+from application import mail
+from flask import render_template, current_app
 
 def send_email(subject, sender, recipients, text_body, html_body):
     ''' Used for sending a custom email will accept any text or html file'''
