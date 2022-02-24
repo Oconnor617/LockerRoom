@@ -1,6 +1,6 @@
 ### This module will be used to store the view funcitons associated with Authentication. Login, Register, Password Reset, etc.
 from flask import render_template, request, flash, redirect, url_for, jsonify, make_response
-from application import app, db
+from application import db # app moved to runtime
 from application.models import Post, User
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
