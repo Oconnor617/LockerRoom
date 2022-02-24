@@ -1,4 +1,4 @@
-from application import db, app  # Import the database stored iin the app directory
+from application import db#, app  # Import the database stored in the app directory
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin  # provides generic implementation so flaskLogin can work with all db
