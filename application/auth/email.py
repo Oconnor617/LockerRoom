@@ -4,8 +4,8 @@ Created on Aug 1, 2021
 Issues:
 """
 from flask_mail import Message
-from application import app, mail
-from flask import render_template
+from application import mail
+from flask import render_template, current_app
 from application.email import send_email
 
 def send_password_reset_email(user):
