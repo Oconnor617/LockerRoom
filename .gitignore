@@ -1,2 +1,5 @@
 venv/
 **/__pycache__/
+requirments.txt
+logs/LockerRoom.log
+logs/LockerRoom.log.1
