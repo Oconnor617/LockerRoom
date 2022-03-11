@@ -2,7 +2,11 @@
 Created June 16, 2021
 @author: oconn
 """
-from flask import Flask
+import os
+import logging
+from logging.handlers import RotatingFileHandler
+from os import mkdir
+from flask import Flask, current_app, request
 #from application.main import routes  # From module flask import class Flask
 from config import Config  # get our Configuration variables
 from flask_sqlalchemy import SQLAlchemy
@@ -38,8 +42,23 @@ def create_app(config_class=Config):
     from application.main import bp as main_bp
     app.register_blueprint(main_bp) #Register the Blueprint that will handle most of the routes
 
-    return app #Return the Flask instance with all the extentions initialized
+    if not app.debug and not app.testing: # Only run the logging when we are not running unittests or we are in Debug mode
+        if not os.path.exists('logs'):
+            os.mkdir('logs') # if this is your first time running the app or you deleted the log file. Make it now
+        file_handler = RotatingFileHandler('logs/LockerRoom.log',
+                                           maxBytes=10240, backupCount=10)
+                                           # Only keep the 10 most recent sessions and limit storage size to 10KB
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]'))
+        file_handler.setLevel(logging.DEBUG)
+        app.logger.addHandler(file_handler)
 
+        app.logger.setLevel(logging.DEBUG)
+        app.logger.info('LockerRoom startup')
+
+
+    return app #Return the Flask instance with all the extentions initialized
 
 # Construct an instance of Flask class for our webapp
 #app = Flask(__name__)

@@ -1,5 +1,5 @@
 ### This module will be used to store the view funcitons associated with Authentication. Login, Register, Password Reset, etc.
-from flask import render_template, request, flash, redirect, url_for, jsonify, make_response
+from flask import render_template, request, flash, redirect, url_for, jsonify, make_response, current_app
 from application import db # app moved to runtime
 from application.models import Post, User
 from flask_login import current_user, login_user, logout_user, login_required
@@ -7,8 +7,10 @@ from werkzeug.urls import url_parse
 from application.auth.email import send_password_reset_email, send_auth_email
 from flask_mail import Message
 import datetime
+import logging
 
 from application.auth import bp # The auth Blueprint in this case
+
 
 #############################################################################################
 # Routes for user entrance/exit into app
@@ -31,6 +33,7 @@ def login():
         if user is None or not user.check_password(password):
             flash('This is Server-side validation: Invalid username or password')
             return redirect(url_for('auth.login'))
+        current_app.logger.info('%s logged in successfully', user.username)
         login_user(user)
         # following code is for handling redirects if someone who is not logged in tried to access protected pages
         next_page = request.args.get('next')

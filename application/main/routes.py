@@ -2,7 +2,7 @@
 Created June 16, 2021
 @author: oconn
 """
-from flask import render_template, request, flash, redirect, url_for, jsonify, make_response
+from flask import render_template, request, flash, redirect, url_for, jsonify, make_response, current_app
 from application import db
 from application.models import Post, User
 from flask_login import current_user, login_user, logout_user, login_required
@@ -150,13 +150,13 @@ def update_dl(username):
         new_dl = request.form['new_dl']
         if new_dl == '':
             flash('More Server-Side Validation. Please enter a Number')
-            return redirect(url_for('user', username=user.username))
+            return redirect(url_for('main.user', username=user.username))
         user.set_dl(new_dl) # update the DB
         db.session.add(user)
         db.session.commit()
         flash("Your Deadlift Max has been updated")
         # return render_template('user.html', user=user)
-        return redirect(url_for('user', username=user.username))
+        return redirect(url_for('main.user', username=user.username))
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
@@ -169,13 +169,13 @@ def update_ohp(username):
         new_ohp = request.form['new_ohp']
         if new_ohp == '':
             flash('More Server-Side Validation. Please enter a Number')
-            return redirect(url_for('user', username=user.username))
+            return redirect(url_for('main.user', username=user.username))
         user.set_ohp(new_ohp) # update the DB
         db.session.add(user)
         db.session.commit()
         flash("Your Press Max has been updated")
         # return render_template('user.html', user=user)
-        return redirect(url_for('user', username=user.username))
+        return redirect(url_for('main.user', username=user.username))
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
@@ -188,13 +188,13 @@ def update_squat(username):
         new_squat = request.form['new_squat']
         if new_squat == '':
             flash('More Server-Side Validation. Please enter a Number')
-            return redirect(url_for('user', username=user.username))
+            return redirect(url_for('main.user', username=user.username))
         user.set_squat(new_squat) # update the DB
         db.session.add(user)
         db.session.commit()
         flash("Your Squat Max has been updated")
         # return render_template('user.html', user=user)
-        return redirect(url_for('user', username=user.username))
+        return redirect(url_for('main.user', username=user.username))
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
@@ -207,13 +207,16 @@ def update_bench(username):
         new_bench = request.form['new_bench']
         if new_bench == '':
             flash('More Server-Side Validation. Please enter a Number')
-            return redirect(url_for('user', username=user.username))
+            return redirect(url_for('main.user', username=user.username))
         user.set_bench(new_bench) # update the DB
         db.session.add(user)
         db.session.commit()
+        print(request.get_data())
+        print("Bench: {}".format(new_bench))
+        log_request_data(request.headers, request.get_data())
         flash("Your Press Max has been updated")
         # return render_template('user.html', user=user)
-        return redirect(url_for('user', username=user.username))
+        return redirect(url_for('main.user', username=user.username))
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
@@ -226,13 +229,13 @@ def update_weight(username):
         new_weight = request.form['enter-weight']
         if new_weight == '':
             flash('More Server-Side Validation. Please enter a Number')
-            return redirect(url_for('user', username=user.username))
+            return redirect(url_for('user', username=user.username)) # I left this broken on purpose for testing purposes
         user.set_weight(new_weight) # update the DB
         db.session.add(user)
         db.session.commit()
         flash("Your weight has been updated")
         # return render_template('user.html', user=user)
-        return redirect(url_for('user', username=user.username))
+        return redirect(url_for('main.user', username=user.username))
     else:  # Must be a GET
         return render_template('user.html', user=user)
 
@@ -256,3 +259,8 @@ def check_un(): #I am not sure if this needs perameters or not
             return res
     else:
         print('I am pretty sure I should not get here')
+
+def log_request_data(headers, body):
+    """A function that will be called to log request data. This will only log requestes to specific resources."""
+    current_app.logger.debug('Headers: %s', headers)
+    current_app.logger.debug('Body: %s', body)
